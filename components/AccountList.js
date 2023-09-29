@@ -4,6 +4,8 @@ import { supabase } from "../utils/supabaseClient";
 import { useSpring, animated } from "react-spring";
 import Creatable from "react-select/creatable";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { Toaster, toast } from "react-hot-toast";
+import Image from "next/image";
 
 export default function AccountList() {
   const { user } = useUser();
@@ -18,6 +20,7 @@ export default function AccountList() {
     userId: user?.sub,
     rate: "",
     past_work: [],
+    profilePicLink: "",
   });
 
   const formAnimation = useSpring({
@@ -30,6 +33,8 @@ export default function AccountList() {
 
   async function fetchAccounts() {
     const { data, error } = await supabase.from("accounts").select("*");
+    console.log("🚀 ~ file: AccountList.js:35 ~ fetchAccounts ~ data:", data);
+    console.log("🚀 ~ file: AccountList.js:41 ~ fetchAccounts ~ user:", user);
     if (error) console.log("Error: ", error);
     else {
       setAccounts(data);
@@ -38,11 +43,6 @@ export default function AccountList() {
   }
 
   async function createOrUpdateAccount() {
-    // if (!user) {
-    //   alert("You must be logged in to create or update an account.");
-    //   return;
-    // }
-
     const { data, error } = await supabase
       .from("accounts")
       .upsert([account])
@@ -71,8 +71,42 @@ export default function AccountList() {
     setAccount({ ...account, past_work: newValue });
   };
 
+  async function handleFileChange(event) {
+    const file = event.target.files[0];
+    const filePath = `${account.id}.${file.name.split(".").pop()}`;
+
+    let { error, data } = await supabase.storage
+      .from("profile-pics")
+      .upload(filePath, file, {
+        upsert: true,
+      });
+
+    if (error) {
+      console.error("Error uploading file:", error);
+      toast("Image upload failed, please try again", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    console.log("Upload data:", data);
+
+    // Get the URL of the uploaded file
+    let publicURL = supabase.storage
+      .from("profile-pics")
+      .getPublicUrl(filePath);
+
+    console.log(
+      "🚀 ~ file: AccountList.js:94 ~ handleFileChange ~ publicURL:",
+      publicURL
+    );
+
+    setAccount({ ...account, profilePicLink: publicURL?.data?.publicUrl });
+  }
+
   return (
     <div className="p-6">
+      <Toaster />
       <div className="flex gap-3">
         {" "}
         {userHasProfile ? (
@@ -147,6 +181,22 @@ export default function AccountList() {
             onChange={(e) => setAccount({ ...account, rate: e.target.value })}
             placeholder="Rate"
           />
+          <div className="flex">
+            {" "}
+            <div className="flex flex-col">
+              <p className="text-white">Profile Pic</p>
+              <input type="file" onChange={handleFileChange} />
+            </div>
+            {account.profilePicLink && (
+              <Image
+                src={account?.profilePicLink}
+                alt="Profile"
+                width={64}
+                height={64}
+                className="rounded-full h-16 w-16 object-cover"
+              />
+            )}
+          </div>
           <button
             className="bg-first py-2 px-4 rounded text-third"
             onClick={createOrUpdateAccount}
@@ -158,7 +208,19 @@ export default function AccountList() {
       <div className="grid grid-cols-3 gap-4 mt-4 mb-2">
         {accounts.map((account, index) => (
           <div key={index} className="border p-4 rounded text-white shadow-lg">
-            <h2 className="font-bold text-2xl mb-2">{account.name}</h2>
+            <div className="flex">
+              <h2 className="font-bold text-2xl mb-2">{account.name}</h2>
+              {account.profilePicLink && (
+                <Image
+                  src={account?.profilePicLink}
+                  alt="Profile"
+                  width={64}
+                  height={64}
+                  className="rounded-full h-16 w-16 object-cover"
+                />
+              )}
+            </div>
+
             <a
               href={account.contact}
               className="text-blue-200 underline break-words whitespace-pre-wrap text-xs"
