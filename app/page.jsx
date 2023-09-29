@@ -17,7 +17,7 @@ export default function Home() {
         <main className="flex-grow flex items-center justify-center p-10">
           <div className="w-full max-w-4xl p-6 text-third space-y-6">
             <h1 className="text-3xl font-bold leading-tight text-center text-white">
-              Heading into unchartered territory? Talk to someone who's been there before.
+              Heading into uncharted territory? Talk to someone who's been there before.
             </h1>
             <h2 className="text-2xl text-first text-center">Find a sounding board.</h2>
             <p className="text-lg text-center text-white">
