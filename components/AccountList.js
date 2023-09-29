@@ -38,10 +38,10 @@ export default function AccountList() {
   }
 
   async function createOrUpdateAccount() {
-    if (!user) {
-      alert("You must be logged in to create or update an account.");
-      return;
-    }
+    // if (!user) {
+    //   alert("You must be logged in to create or update an account.");
+    //   return;
+    // }
 
     const { data, error } = await supabase
       .from("accounts")
@@ -91,7 +91,13 @@ export default function AccountList() {
         ) : (
           <button
             className="bg-second py-2 px-4 rounded text-white"
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => {
+              if (!user) {
+                alert("You must be logged in to create or update an account.");
+                return;
+              }
+              setShowForm(!showForm);
+            }}
           >
             Add Your Profile
           </button>
@@ -179,7 +185,14 @@ export default function AccountList() {
             <ul className="list-inside">
               {account?.past_work?.map((past_work, index) => (
                 <li key={index} className="text-gray-300">
-                  <a href={past_work.label} target="_blank" rel="noopener noreferrer" className="text-blue-200 underline break-words whitespace-pre-wrap text-xs">{past_work.label}</a>
+                  <a
+                    href={past_work.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-200 underline break-words whitespace-pre-wrap text-xs"
+                  >
+                    {past_work.label}
+                  </a>
                 </li>
               ))}
             </ul>

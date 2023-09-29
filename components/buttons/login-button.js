@@ -2,6 +2,7 @@ import { usePathname } from 'next/navigation';
 
 export const LoginButton = () => {
   const pathname = usePathname()
+  console.log("🚀 ~ file: login-button.js:5 ~ LoginButton ~ pathname:", pathname)
 
   return (
     <a
