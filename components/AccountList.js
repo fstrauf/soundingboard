@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "../utils/supabaseClient";
-import { useSpring, animated } from "react-spring";
+import { useSpring, animated, useTransition } from "react-spring";
 import Creatable from "react-select/creatable";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Toaster, toast } from "react-hot-toast";
@@ -23,18 +23,32 @@ export default function AccountList() {
     profilePicLink: "",
   });
 
-  const formAnimation = useSpring({
-    transform: showForm ? "translateX(0)" : "translateX(100%)",
+  const formRef = useRef();
+
+  const transitions = useTransition(showForm, {
+    from: { transform: 'translateX(100%)', opacity: 0 },
+    enter: { transform: 'translateX(0)', opacity: 1 },
+    leave: { transform: 'translateX(100%)', opacity: 0 },
   });
 
   useEffect(() => {
     fetchAccounts();
+
+    function handleClickOutside(event) {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        setShowForm(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   async function fetchAccounts() {
     const { data, error } = await supabase.from("accounts").select("*");
-    console.log("🚀 ~ file: AccountList.js:35 ~ fetchAccounts ~ data:", data);
-    console.log("🚀 ~ file: AccountList.js:41 ~ fetchAccounts ~ user:", user);
+
     if (error) console.log("Error: ", error);
     else {
       setAccounts(data);
@@ -138,72 +152,75 @@ export default function AccountList() {
         )}
       </div>
 
-      {showForm && (
-        <animated.div
-          style={formAnimation}
-          className="flex flex-col gap-3 w-1/3 mt-4 absolute mr-1 -right-2 bg-third border-second border-2 rounded-lg p-4 shadow-lg"
-        >
-          <input
-            className="border p-2 rounded"
-            value={account.name}
-            onChange={(e) => setAccount({ ...account, name: e.target.value })}
-            placeholder="Name"
-          />
-          <input
-            className="border p-2 rounded"
-            value={account.contact}
-            onChange={(e) =>
-              setAccount({ ...account, contact: e.target.value })
-            }
-            placeholder="Contact"
-          />
-          <Creatable
-            isMulti
-            onChange={handleExpertiseChange}
-            placeholder="Trained Expertise"
-            value={account.trained_expertise}
-          />
-          <Creatable
-            isMulti
-            onChange={handleNicheExpertiseChange}
-            placeholder="Niche Expertise"
-            value={account.niche_expertise}
-          />
-          <Creatable
-            isMulti
-            onChange={handlePastWorkChange}
-            placeholder="Past Work"
-            value={account.post_work}
-          />
-          <input
-            className="border p-2 rounded"
-            value={account.rate}
-            onChange={(e) => setAccount({ ...account, rate: e.target.value })}
-            placeholder="Rate"
-          />
-          <div className="flex">
-            {" "}
-            <div className="flex flex-col">
-              <p className="text-white">Profile Pic</p>
-              <input type="file" onChange={handleFileChange} />
-            </div>
-            {account.profilePicLink && (
-              <Image
-                src={account?.profilePicLink}
-                alt="Profile"
-                width={64}
-                height={64}
-                className="rounded-full h-16 w-16 object-cover"
-              />
-            )}
-          </div>
-          <button
-            className="bg-first py-2 px-4 rounded text-third"
-            onClick={createOrUpdateAccount}
+      {transitions((style, item) =>
+        item ? (
+          <animated.div
+            style={style}
+            ref={formRef}
+            className="flex flex-col gap-3 w-1/3 mt-4 absolute mr-1 -right-2 bg-third border-second border-2 rounded-lg p-4 shadow-lg"
           >
-            Submit
-          </button>
-        </animated.div>
+            <input
+              className="border p-2 rounded"
+              value={account.name}
+              onChange={(e) => setAccount({ ...account, name: e.target.value })}
+              placeholder="Name"
+            />
+            <input
+              className="border p-2 rounded"
+              value={account.contact}
+              onChange={(e) =>
+                setAccount({ ...account, contact: e.target.value })
+              }
+              placeholder="Contact"
+            />
+            <Creatable
+              isMulti
+              onChange={handleExpertiseChange}
+              placeholder="Trained Expertise"
+              value={account.trained_expertise}
+            />
+            <Creatable
+              isMulti
+              onChange={handleNicheExpertiseChange}
+              placeholder="Niche Expertise"
+              value={account.niche_expertise}
+            />
+            <Creatable
+              isMulti
+              onChange={handlePastWorkChange}
+              placeholder="Past Work"
+              value={account.post_work}
+            />
+            <input
+              className="border p-2 rounded"
+              value={account.rate}
+              onChange={(e) => setAccount({ ...account, rate: e.target.value })}
+              placeholder="Rate"
+            />
+            <div className="flex">
+              {" "}
+              <div className="flex flex-col">
+                <p className="text-white">Profile Pic</p>
+                <input type="file" onChange={handleFileChange} />
+              </div>
+              {account.profilePicLink && (
+                <Image
+                  src={account?.profilePicLink}
+                  alt="Profile"
+                  width={64}
+                  height={64}
+                  className="rounded-full h-16 w-16 object-cover"
+                />
+              )}
+            </div>
+            <button
+              className="bg-first py-2 px-4 rounded text-third"
+              onClick={createOrUpdateAccount}
+            >
+              Submit
+            </button>
+          </animated.div>
+        ) : null
       )}
       <div className="grid grid-cols-3 gap-4 mt-4 mb-2">
         {accounts.map((account, index) => (
