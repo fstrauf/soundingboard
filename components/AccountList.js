@@ -6,6 +6,7 @@ import Creatable from "react-select/creatable";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Toaster, toast } from "react-hot-toast";
 import Image from "next/image";
+import FormField from "./FormField";
 
 export default function AccountList() {
   const { user } = useUser();
@@ -51,11 +52,7 @@ export default function AccountList() {
 
   async function fetchAccounts() {
     const { data, error } = await supabase.from("accounts").select("*");
-    console.log("🚀 ~ file: AccountList.js:52 ~ fetchAccounts ~ data:", data);
-    console.log(
-      "🚀 ~ file: AccountList.js:58 ~ fetchAccounts ~ user?.sub:",
-      user?.sub
-    );
+
     if (error) console.log("Error: ", error);
     else {
       setAccounts(data);
@@ -165,46 +162,72 @@ export default function AccountList() {
           <animated.div
             style={style}
             ref={formRef}
-            className="flex flex-col gap-3 w-1/3 mt-4 absolute mr-1 -right-2 bg-third border-second border-2 rounded-md p-4 shadow-lg"
+            className="flex flex-col gap-3 w-2/5 mt-4 absolute mr-1 -right-2 bg-third border-second border-2 rounded-md p-4 shadow-lg"
           >
-            <input
-              className="border p-2 rounded"
-              value={account.name}
-              onChange={(e) => setAccount({ ...account, name: e.target.value })}
-              placeholder="Name"
-            />
-            <input
-              className="border p-2 rounded"
-              value={account.contact}
-              onChange={(e) =>
-                setAccount({ ...account, contact: e.target.value })
-              }
-              placeholder="Contact"
-            />
-            <Creatable
-              isMulti
-              onChange={handleExpertiseChange}
-              placeholder="Trained Expertise"
-              value={account.trained_expertise}
-            />
-            <Creatable
-              isMulti
-              onChange={handleNicheExpertiseChange}
-              placeholder="Niche Expertise"
-              value={account.niche_expertise}
-            />
-            <Creatable
-              isMulti
-              onChange={handlePastWorkChange}
-              placeholder="Past Work"
-              value={account.post_work}
-            />
-            <input
-              className="border p-2 rounded"
-              value={account.rate}
-              onChange={(e) => setAccount({ ...account, rate: e.target.value })}
-              placeholder="Rate"
-            />
+            <FormField label="Name" text="Enter your full name">
+              {" "}
+              <input
+                className="border p-2 rounded w-3/4 h-12 items-center text-sm"
+                value={account.name}
+                onChange={(e) =>
+                  setAccount({ ...account, name: e.target.value })
+                }
+                placeholder="Name"
+              />
+            </FormField>
+
+            <FormField label="Contact" text="How can people get in touch?">
+              <input
+                className="border p-2 rounded w-3/4 h-12 items-center text-sm"
+                value={account.contact}
+                onChange={(e) =>
+                  setAccount({ ...account, contact: e.target.value })
+                }
+                placeholder="Contact"
+              />
+            </FormField>
+            <FormField
+              label="Trained Expertise"
+              text="What are the main things you are good at?"
+            >
+              <Creatable
+                isMulti
+                onChange={handleExpertiseChange}
+                placeholder="Trained Expertise"
+                value={account.trained_expertise}
+              />
+            </FormField>
+            <FormField
+              label="Niche Expertise"
+              text="What else do you know really well?"
+            >
+              <Creatable
+                isMulti
+                onChange={handleNicheExpertiseChange}
+                placeholder="Niche Expertise"
+                value={account.niche_expertise}
+              />
+            </FormField>
+            <FormField label="Past Work" text="Link some past projects">
+              <Creatable
+                isMulti
+                onChange={handlePastWorkChange}
+                placeholder="Past Work"
+                value={account.post_work}
+              />
+            </FormField>
+            <FormField label="Rate" text="How much do you charge?">
+              {" "}
+              <input
+                className="border p-2 rounded w-3/4 h-12 items-center text-sm"
+                value={account.rate}
+                onChange={(e) =>
+                  setAccount({ ...account, rate: e.target.value })
+                }
+                placeholder="Rate"
+              />
+            </FormField>
+
             <div className="flex">
               {" "}
               <div className="flex flex-col">
