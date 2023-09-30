@@ -256,7 +256,7 @@ export default function AccountList() {
       <div className="grid grid-cols-3 gap-4 mt-4 mb-2">
         {accounts.map((account, index) => (
           <div key={index} className="border p-4 rounded text-white shadow-lg">
-            <div className="flex">
+            <div className="flex justify-between">
               <h2 className="font-bold text-2xl mb-2">{account.name}</h2>
               {account.profilePicLink ? (
                 <>
