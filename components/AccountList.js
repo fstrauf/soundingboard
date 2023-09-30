@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../utils/supabaseClient";
-import { useSpring, animated, useTransition } from "react-spring";
+import { animated, useTransition } from "react-spring";
 import Creatable from "react-select/creatable";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Toaster, toast } from "react-hot-toast";
@@ -26,13 +26,16 @@ export default function AccountList() {
   const formRef = useRef();
 
   const transitions = useTransition(showForm, {
-    from: { transform: 'translateX(100%)', opacity: 0 },
-    enter: { transform: 'translateX(0)', opacity: 1 },
-    leave: { transform: 'translateX(100%)', opacity: 0 },
+    from: { transform: "translateX(100%)", opacity: 0 },
+    enter: { transform: "translateX(0)", opacity: 1 },
+    leave: { transform: "translateX(100%)", opacity: 0 },
   });
 
   useEffect(() => {
-    fetchAccounts();
+    console.log(user);
+    if (user) {
+      fetchAccounts();
+    }
 
     function handleClickOutside(event) {
       if (formRef.current && !formRef.current.contains(event.target)) {
@@ -44,11 +47,15 @@ export default function AccountList() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [user]);
 
   async function fetchAccounts() {
     const { data, error } = await supabase.from("accounts").select("*");
-
+    console.log("🚀 ~ file: AccountList.js:52 ~ fetchAccounts ~ data:", data);
+    console.log(
+      "🚀 ~ file: AccountList.js:58 ~ fetchAccounts ~ user?.sub:",
+      user?.sub
+    );
     if (error) console.log("Error: ", error);
     else {
       setAccounts(data);
@@ -62,7 +69,7 @@ export default function AccountList() {
       .upsert([account])
       .select();
 
-    if (error) console.log("Error: ", error);
+    if (error) toast.error(error, { position: "bottom-right" });
     else {
       const updatedAccounts = accounts.map((account) =>
         account.userId === user.sub ? data[0] : account
@@ -70,6 +77,7 @@ export default function AccountList() {
       setAccounts(updatedAccounts);
       //   setAccount({ name: "", contact: "", trained_expertise: [] });
       setShowForm(false);
+      toast.success("Changes saved", { position: "bottom-right" });
     }
   }
 
@@ -157,7 +165,7 @@ export default function AccountList() {
           <animated.div
             style={style}
             ref={formRef}
-            className="flex flex-col gap-3 w-1/3 mt-4 absolute mr-1 -right-2 bg-third border-second border-2 rounded-lg p-4 shadow-lg"
+            className="flex flex-col gap-3 w-1/3 mt-4 absolute mr-1 -right-2 bg-third border-second border-2 rounded-md p-4 shadow-lg"
           >
             <input
               className="border p-2 rounded"
@@ -217,7 +225,7 @@ export default function AccountList() {
               className="bg-first py-2 px-4 rounded text-third"
               onClick={createOrUpdateAccount}
             >
-              Submit
+              Save
             </button>
           </animated.div>
         ) : null
