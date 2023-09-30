@@ -24,12 +24,12 @@ export default function AccountForm() {
           <animated.div
             style={style}
             ref={formRef}
-            className="flex flex-col gap-3 w-2/5 mt-4 absolute mr-1 -right-2 bg-third border-second border-2 rounded-md p-4 shadow-lg"
+            className="flex flex-col gap-3 w-2/5 mt-4 absolute right-0 bg-third border-second border-2 border-r-0 rounded-l-md p-4 shadow-lg"
           >
             <FormField label="Name" text="Enter your full name">
               {" "}
               <input
-                className="border p-2 rounded w-3/4 h-12 items-center text-sm"
+                className="border p-2 rounded w-full h-12 items-center text-sm"
                 value={account.name}
                 onChange={(e) =>
                   setAccount({ ...account, name: e.target.value })
@@ -40,7 +40,7 @@ export default function AccountForm() {
 
             <FormField label="Contact" text="How can people get in touch?">
               <input
-                className="border p-2 rounded w-3/4 h-12 items-center text-sm"
+                className="border p-2 rounded w-full h-12 items-center text-sm"
                 value={account.contact}
                 onChange={(e) =>
                   setAccount({ ...account, contact: e.target.value })
