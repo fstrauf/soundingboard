@@ -210,14 +210,19 @@ export default function AccountList() {
           <div key={index} className="border p-4 rounded text-white shadow-lg">
             <div className="flex">
               <h2 className="font-bold text-2xl mb-2">{account.name}</h2>
-              {account.profilePicLink && (
-                <Image
-                  src={account?.profilePicLink}
-                  alt="Profile"
-                  width={64}
-                  height={64}
-                  className="rounded-full h-16 w-16 object-cover"
-                />
+              {account.profilePicLink ? (
+                <>
+                  {" "}
+                  <Image
+                    src={account?.profilePicLink}
+                    alt="Profile"
+                    width={64}
+                    height={64}
+                    className="rounded-full h-16 w-16 object-cover"
+                  />
+                </>
+              ) : (
+                <div className="rounded-full h-16 w-16 object-cover bg-slate-300"></div>
               )}
             </div>
 
