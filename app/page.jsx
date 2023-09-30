@@ -5,7 +5,7 @@
 // import Features from "../components/Features";
 // import Link from "next/link";
 import Head from "next/head";
-import AccountList from "../components/AccountList";
+import AccountList from "../components/AccountSection/AccountSection";
 
 export default function Home() {
   return (
