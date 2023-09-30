@@ -23,6 +23,7 @@ export default function AccountList() {
     past_work: [],
     profilePicLink: "",
   });
+  
 
   const formRef = useRef();
 
@@ -115,11 +116,6 @@ export default function AccountList() {
       .from("profile-pics")
       .getPublicUrl(filePath);
 
-    console.log(
-      "🚀 ~ file: AccountList.js:94 ~ handleFileChange ~ publicURL:",
-      publicURL
-    );
-
     setAccount({ ...account, profilePicLink: publicURL?.data?.publicUrl });
   }
 
@@ -135,6 +131,7 @@ export default function AccountList() {
               const currentUserAccount = accounts.find(
                 (account) => account.userId === user?.sub
               );
+              console.log("🚀 ~ file: AccountList.js:135 ~ AccountList ~ currentUserAccount:", currentUserAccount)
               setAccount(currentUserAccount);
               setShowForm(true);
             }}
@@ -213,7 +210,7 @@ export default function AccountList() {
                 isMulti
                 onChange={handlePastWorkChange}
                 placeholder="Past Work"
-                value={account.post_work}
+                value={account.past_work}
               />
             </FormField>
             <FormField label="Rate" text="How much do you charge?">
