@@ -55,7 +55,13 @@ export default function AccountSection() {
     else {
       setAccounts(data);
       if (user) {
-        setUserHasProfile(data.some((account) => account.userId === user?.sub));
+        const account = data.find((account) => account.userId === user?.sub)
+        
+        if(account){
+          setUserHasProfile(true);
+          setAccount(account)
+        }
+        
       }
     }
   }
