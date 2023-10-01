@@ -1,3 +1,4 @@
+import { toast } from 'react-hot-toast';
 import AccountContext from './AccountContext';
 import React from 'react';
 
@@ -24,7 +25,7 @@ export default function EditProfile() {
           className="bg-second py-2 px-4 rounded text-white"
           onClick={() => {
             if (!user) {
-              alert("You must be logged in to create or update an account.");
+              toast.error("You must be logged in to create or update a profiel.",{position:"bottom-right"});
               return;
             }
             setShowForm(!showForm);

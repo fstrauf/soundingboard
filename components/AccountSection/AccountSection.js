@@ -34,10 +34,7 @@ export default function AccountSection() {
   });
 
   useEffect(() => {
-    console.log(user);
-    if (user) {
-      fetchAccounts();
-    }
+    fetchAccounts();
 
     function handleClickOutside(event) {
       if (formRef.current && !formRef.current.contains(event.target)) {
@@ -57,7 +54,9 @@ export default function AccountSection() {
     if (error) console.log("Error: ", error);
     else {
       setAccounts(data);
-      setUserHasProfile(data.some((account) => account.userId === user?.sub));
+      if (user) {
+        setUserHasProfile(data.some((account) => account.userId === user?.sub));
+      }
     }
   }
 
