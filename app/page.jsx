@@ -14,7 +14,7 @@ export default function Home() {
         <Head>
           {/* <link rel="canonical" href="https://www.expensesorted.com/" /> */}
         </Head>
-        <main className="flex-grow flex items-center justify-center p-10">
+        <main className="flex-grow flex items-center justify-center sm:p-10">
           <div className="w-full max-w-4xl p-6 text-third space-y-6">
             <h1 className="text-3xl font-bold leading-tight text-center text-white">
               Heading into uncharted territory? Talk to someone who's been there before.

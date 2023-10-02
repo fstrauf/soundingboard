@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function AccountList() {
   const { accounts } = React.useContext(AccountContext);
   return (
-    <div className="grid grid-cols-3 gap-4 mt-4 mb-2">
+    <div className="grid sm:grid-cols-3 md:grid-cols-2 gap-4 mt-4 mb-2">
       {accounts.map((account, index) => (
         <div key={index} className="border p-4 rounded text-white shadow-lg">
           <Link

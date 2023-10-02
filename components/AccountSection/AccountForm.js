@@ -29,7 +29,7 @@ export default function AccountForm() {
             <animated.div
               style={style}
               ref={formRef}
-              className="flex flex-col gap-3 w-2/5 mt-4 absolute right-0 bg-third border-second border-2 border-r-0 rounded-l-md p-4 shadow-lg"
+              className="flex flex-col gap-3 w-full md:w-2/5 mt-4 absolute right-0 bg-third border-second border-2 md:border-r-0 rounded-md md:rounded-l-md p-2 sm:p-4 shadow-lg"
             >
               <FormField label="Name" text="Enter your full name">
                 {" "}
@@ -95,7 +95,7 @@ export default function AccountForm() {
                 />
               </FormField>
 
-              <div className="flex">
+              <div className="flex md:flex-row flex-col gap-3">
                 {" "}
                 <div className="flex flex-col">
                   <p className="text-white">Profile Pic</p>

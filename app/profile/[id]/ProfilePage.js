@@ -4,7 +4,7 @@ import PageSection from "./PageSection";
 
 export default function ProfilePage({ account }) {
   return (
-    <div className="p-4 text-white flex gap-6 flex-col justify-center w-1/2 m-auto">
+    <div className="p-4 text-white flex gap-6 flex-col justify-center md:w-1/2 md:m-auto">
       <div className="flex gap-3">
         
       </div>

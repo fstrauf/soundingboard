@@ -143,7 +143,7 @@ export default function AccountSection() {
         createOrUpdateAccount,
       }}
     >
-      <div className="p-6">
+      <div className="sm:p-6">
         <Toaster />
         <EditProfile />
         <AccountForm />
