@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#1E1E1E] text-white p-4">
+    <footer className="w-full bg-third text-white p-4">
       <div className="flex space-x-4">
         <Link href="/privacy-policy" className="hover:underline text-xs">
           Privacy Policy
