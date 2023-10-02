@@ -6,7 +6,6 @@ import { NavBarButtons } from "../components/nav-bar-buttons";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  console.log("🚀 ~ file: Header.js:9 ~ Header ~ isMenuOpen:", isMenuOpen)
 
   return (
     <header className="w-full bg-third text-white p-4 flex flex-col sm:flex-row items-center justify-between">

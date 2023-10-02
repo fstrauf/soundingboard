@@ -7,7 +7,7 @@ import { Toaster, toast } from "react-hot-toast";
 import AccountContext from "./AccountContext";
 import EditProfile from "./EditProfile";
 import AccountForm from "./AccountForm";
-import AccountList from "./AccoutList";
+import AccountList from "./AccountList";
 
 export default function AccountSection() {
   const { user } = useUser();
@@ -60,8 +60,7 @@ export default function AccountSection() {
         if(account){
           setUserHasProfile(true);
           setAccount(account)
-        }
-        
+        }        
       }
     }
   }

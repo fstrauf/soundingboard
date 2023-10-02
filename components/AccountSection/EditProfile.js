@@ -14,7 +14,6 @@ export default function EditProfile() {
     account,
   } = React.useContext(AccountContext);
 
-  console.log("🚀 ~ file: EditProfile.js:8 ~ EditProfile ~ account:", account);
   return (
     <div className="flex gap-3">
       {" "}

@@ -3,9 +3,7 @@ import React from "react";
 import Image from "next/image";
 
 export default function AccountList() {
-  const {
-    accounts,
-  } = React.useContext(AccountContext);
+  const { accounts } = React.useContext(AccountContext);
   return (
     <div className="grid grid-cols-3 gap-4 mt-4 mb-2">
       {accounts.map((account, index) => (
@@ -28,12 +26,6 @@ export default function AccountList() {
             )}
           </div>
 
-          <a
-            href={account.contact}
-            className="text-blue-200 underline break-words whitespace-pre-wrap text-xs"
-          >
-            {account.contact}
-          </a>
           <p className="font-semibold text-lg mt-2">Trained Expertise</p>
           <ul className="list-disc list-inside">
             {account?.trained_expertise?.map((trained_expertise, index) => (
@@ -67,6 +59,13 @@ export default function AccountList() {
           </ul>
           <p className="font-semibold text-lg mt-2">Rate</p>
           <p>{account.rate}</p>
+          <p className="font-semibold text-lg mt-2">Contact</p>
+          <a
+            href={account.contact}
+            className="text-blue-200 underline break-words whitespace-pre-wrap text-xs"
+          >
+            {account.contact}
+          </a>
         </div>
       ))}
     </div>
