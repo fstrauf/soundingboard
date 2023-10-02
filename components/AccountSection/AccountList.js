@@ -1,6 +1,8 @@
 import AccountContext from "./AccountContext";
 import React from "react";
 import Image from "next/image";
+import { convertUrlString } from "../../utils/helper";
+import Link from "next/link";
 
 export default function AccountList() {
   const { accounts } = React.useContext(AccountContext);
@@ -8,23 +10,29 @@ export default function AccountList() {
     <div className="grid grid-cols-3 gap-4 mt-4 mb-2">
       {accounts.map((account, index) => (
         <div key={index} className="border p-4 rounded text-white shadow-lg">
-          <div className="flex justify-between">
-            <h2 className="font-bold text-2xl mb-2">{account.name}</h2>
-            {account.profilePicLink ? (
-              <>
-                {" "}
-                <Image
-                  src={account?.profilePicLink}
-                  alt="Profile"
-                  width={64}
-                  height={64}
-                  className="rounded-full h-16 w-16 object-cover"
-                />
-              </>
-            ) : (
-              <div className="rounded-full h-16 w-16 object-cover bg-slate-300"></div>
-            )}
-          </div>
+          <Link
+            href={`/profile/${account.id.toString()}-${convertUrlString(
+              account?.name
+            )}`}
+          >
+            <div className="flex justify-between">
+              <h2 className="font-bold text-2xl mb-2">{account.name}</h2>
+              {account.profilePicLink ? (
+                <>
+                  {" "}
+                  <Image
+                    src={account?.profilePicLink}
+                    alt="Profile"
+                    width={64}
+                    height={64}
+                    className="rounded-full h-16 w-16 object-cover"
+                  />
+                </>
+              ) : (
+                <div className="rounded-full h-16 w-16 object-cover bg-slate-300"></div>
+              )}
+            </div>
+          </Link>
 
           <p className="font-semibold text-lg mt-2">Trained Expertise</p>
           <ul className="list-disc list-inside">
